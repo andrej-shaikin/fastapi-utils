@@ -6,7 +6,13 @@ from conf import settings
 
 
 class BaseModelQueryset(ormar.queryset.QuerySet):
-    pass
+    async def update_or_create(self, defaults: dict | None = None, **kwargs):
+        if defaults is None:
+            defaults = {}
+        if await self.get_or_none(**kwargs) is None:
+            # если объект существует, то обновляем
+            return await self.update(**kwargs, **defaults), False
+        return await self.create(**kwargs, **defaults), True
 
 
 class BaseModelMeta(ormar.ModelMeta):

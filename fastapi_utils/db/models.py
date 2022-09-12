@@ -14,6 +14,14 @@ class BaseModelQueryset(ormar.queryset.QuerySet):
             return await self.create(**kwargs, **defaults), True
         return await self.filter(pk=instance.pk).update(**kwargs, **defaults), False
 
+    async def get_or_create(self, defaults: dict | None = None, **kwargs):
+        if defaults is None:
+            defaults = {}
+        if (instance := await self.get_or_none(**kwargs)) is None:
+            # если объект существует, то обновляем
+            return await self.create(**kwargs, **defaults), True
+        return instance, False
+
 
 class BaseModelMeta(ormar.ModelMeta):
     database = settings.db

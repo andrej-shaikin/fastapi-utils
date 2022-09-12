@@ -3,13 +3,14 @@ from datetime import datetime
 
 import ormar
 from conf import settings
+from ormar.models import metaclass
 
 
 class BaseModelQueryset(ormar.queryset.QuerySet):
     pass
 
 
-class BaseModelMeta(ormar.Model.Meta):
+class BaseModelMeta(metaclass.ModelMeta):
     abstract = True
     database = settings.db
     metadata = settings.db_meta

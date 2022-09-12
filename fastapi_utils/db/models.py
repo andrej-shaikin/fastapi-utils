@@ -1,3 +1,4 @@
+import uuid
 from datetime import datetime
 
 import ormar
@@ -9,8 +10,9 @@ class BaseModelQueryset(ormar.queryset.QuerySet):
 
 
 class BaseModel(ormar.Model):
+    uuid: int = ormar.UUID(default=uuid.uuid4)
     id: int = ormar.Integer(primary_key=True, unique=True, autoincrement=True)
-    created_at: datetime = ormar.DateTime(timezone=settings.TIMEZONE, default=datetime.now, nullable=True)
+    created_at: datetime = ormar.DateTime(timezone=True, default=datetime.now, nullable=True)
 
     class Meta(ormar.Model.Meta):
         abstract = True

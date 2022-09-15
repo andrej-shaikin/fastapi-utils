@@ -12,7 +12,8 @@ class BaseModelQueryset(ormar.queryset.QuerySet):
         if (instance := await self.get_or_none(**kwargs)) is None:
             # если объект существует, то обновляем
             return await self.create(**kwargs, **defaults), True
-        return await self.filter(pk=instance.pk).update(**kwargs, **defaults), False
+        await self.filter(pk=instance.pk).update(**kwargs, **defaults)
+        return await self.filter(pk=instance.pk).first(), False
 
     async def get_or_create(self, defaults: dict | None = None, **kwargs):
         if defaults is None:
